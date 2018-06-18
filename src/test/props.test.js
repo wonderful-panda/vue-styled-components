@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-import { resetStyled, expectCSSMatches } from './utils'
+import { resetStyled, expectCSSMatches, mount } from './utils'
 
 let styled
 
@@ -14,7 +14,7 @@ describe('props', () => {
     const Comp = styled('div', compProps)`
       color: ${props => props.fg || 'black'};
     `
-    const vm = new Vue(Comp).$mount()
+    const vm = mount(Comp)
     expectCSSMatches('.a {color: black;}')
   })
 
@@ -23,12 +23,7 @@ describe('props', () => {
     const Comp = styled('div', compProps)`
       color: ${props => props.fg || 'black'};
     `
-    const Ctor = Vue.extend(Comp)
-    const vm = new Ctor({
-      propsData: {
-        fg: 'red'
-      }
-    }).$mount()
+    const vm = mount(Comp, { fg: 'red' })
     expectCSSMatches('.a {color: red;}')
   })
 })

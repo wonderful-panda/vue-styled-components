@@ -1,7 +1,6 @@
-import Vue from 'vue'
 import expect from 'expect'
 
-import { resetStyled, expectCSSMatches } from './utils'
+import { resetStyled, expectCSSMatches, mount } from './utils'
 
 let styled
 
@@ -18,8 +17,8 @@ describe('extending', () => {
     const Parent = styled.div``
     const Child = styled(Parent)``
 
-    const p = new Vue(Parent).$mount()
-    const c = new Vue(Child).$mount()
+    const p = mount(Parent)
+    const c = mount(Child)
 
     expectCSSMatches('.a {}')
   })
@@ -29,8 +28,8 @@ describe('extending', () => {
     const Parent = styled.div`color: blue;`
     const Child = styled(Parent)``
 
-    const p = new Vue(Parent).$mount()
-    const c = new Vue(Child).$mount()
+    const p = mount(Parent)
+    const c = mount(Child)
 
     expectCSSMatches('.a {color: blue;}')
   })
@@ -39,8 +38,8 @@ describe('extending', () => {
     const Parent = styled.div`color: blue;`
     const Child = styled(Parent)``
 
-    const p = new Vue(Parent).$mount()
-    const c = new Vue(Child).$mount()
+    const p = mount(Parent)
+    const c = mount(Child)
 
     expectCSSMatches('.a {color: blue;}')
   })
@@ -49,17 +48,17 @@ describe('extending', () => {
     const Parent = styled.div`background-color: blue;`
     const Child = styled(Parent)`color: red;`
 
-    const c = new Vue(Child).$mount()
+    const c = mount(Child)
 
-    expectCSSMatches('.a {color: red;}')
+    expectCSSMatches('.b {background-color: blue;} .a {color: red;}')
   })
 
   it('should generate different classes for both parent and child', () => {
     const Parent = styled.div`color: blue;`
     const Child = styled(Parent)`color: red;`
 
-    const p = new Vue(Parent).$mount()
-    const c = new Vue(Child).$mount()
+    const p = mount(Parent)
+    const c = mount(Child)
 
     expectCSSMatches('.a {color: blue;} .b {color: red;}')
   })
@@ -71,8 +70,8 @@ describe('extending', () => {
     `
     const Child = styled(Parent)`color: red;`
 
-    const p = new Vue(Parent).$mount()
-    const c = new Vue(Child).$mount()
+    const p = mount(Parent)
+    const c = mount(Child)
 
     expectCSSMatches('.a {color: blue;}.a > h1 {font-size: 4rem;} .b {color: red;}')
   })
@@ -91,8 +90,8 @@ describe('extending', () => {
 
     const Child = styled(Parent)`background-color: green;`
 
-    const p = new Vue(Parent).$mount()
-    const c = new Vue(Child).$mount()
+    const p = mount(Parent)
+    const c = mount(Child)
 
     expectCSSMatches(`
       .a {color: red;}
@@ -113,8 +112,8 @@ describe('extending', () => {
 
     const Child = styled(Parent)`background-color: green;`
 
-    const c = new Vue(Child).$mount()
-    const p = new Vue(Parent).$mount()
+    const c = mount(Child)
+    const p = mount(Parent)
 
     expect(c.$props).toEqual(p.$props)
   })

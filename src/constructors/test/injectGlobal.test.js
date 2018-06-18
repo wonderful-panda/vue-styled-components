@@ -1,9 +1,8 @@
-import Vue from 'vue';
 import expect from 'expect'
 
 import injectGlobal from '../injectGlobal'
 import styleSheet from '../../models/StyleSheet'
-import { expectCSSMatches, resetStyled } from '../../test/utils'
+import { expectCSSMatches, resetStyled, mount } from '../../test/utils'
 
 let styled = resetStyled()
 const rule1 = 'width: 100%;'
@@ -46,7 +45,7 @@ describe('injectGlobal', () => {
     const Comp = styled.div`
       ${rule3}
     `
-    const vm = new Vue(Comp).$mount();
+    const vm = mount(Comp)
 
     injectGlobal`
       html {

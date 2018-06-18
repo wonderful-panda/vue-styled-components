@@ -3,6 +3,7 @@
  * our public API works the way we promise/want
  */
 import expect from 'expect'
+import Vue from 'vue'
 
 import _styled from '../constructors/styled'
 import mainStyleSheet from '../models/StyleSheet'
@@ -32,4 +33,12 @@ export const expectCSSMatches = (
     expect(css).toEqual(expectation)
   }
   return css
+}
+
+export const mount = (Comp, props) => {
+  return new Vue({
+    render (h) {
+      return h(Comp, { props })
+    }
+  }).$mount()
 }

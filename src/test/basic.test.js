@@ -1,10 +1,9 @@
-import Vue from 'vue';
 import expect from 'expect'
 // import { shallow, mount } from 'enzyme'
 import jsdom from 'mocha-jsdom'
 
 import styleSheet from '../models/StyleSheet'
-import { resetStyled, expectCSSMatches } from './utils'
+import { resetStyled, expectCSSMatches, mount } from './utils'
 
 let styled
 
@@ -22,7 +21,7 @@ describe('basic', () => {
 
   it('should inject a stylesheet when a component is created', () => {
     const Comp = styled.div``
-    const vm = new Vue(Comp).$mount()
+    const vm = mount(Comp)
     expect(styleSheet.injected).toBe(true)
   })
 

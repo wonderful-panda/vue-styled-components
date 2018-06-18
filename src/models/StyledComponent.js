@@ -6,40 +6,30 @@ export default (ComponentStyle) => {
     const mergedProps = Object.assign({}, prevProps, props)
 
     const componentStyle = new ComponentStyle(rules)
+    let getGeneratedClassName
+    if (rules.filter(r => r instanceof Function).length === 0) {
+      const generatedClassName = componentStyle.generateAndInjectStyles({})
+      getGeneratedClassName = () => generatedClassName
+    } else {
+      getGeneratedClassName = props => componentStyle.generateAndInjectStyles(Object.assign({}, props))
+    }
 
     const StyledComponent = {
+      functional: true,
       props: mergedProps,
-      render: function (createElement) {
+      render: function (createElement, { props, data, children }) {
+        const generatedClassName = getGeneratedClassName(props)
+        let staticClass
+        if (data.staticClass) {
+          staticClass = data.staticClass + ' ' + generatedClassName
+        } else {
+          staticClass = generatedClassName
+        }
         return createElement(
           target,
-          {
-            class: [this.generatedClassName],
-            props: this.$props,
-            domProps: {
-              value: this.value
-            },
-            on: {
-              input: (event) => {
-                this.$emit('input', event.target.value)
-              },
-              click: (event) => {
-                this.$emit('click', event)
-              }
-            }
-          },
-          this.$slots.default
+          Object.assign({}, data, { staticClass }),
+          children
         )
-      },
-      methods: {
-        generateAndInjectStyles (componentProps) {
-          return componentStyle.generateAndInjectStyles(componentProps)
-        }
-      },
-      computed: {
-        generatedClassName () {
-          const componentProps = Object.assign({}, this.$props)
-          return this.generateAndInjectStyles(componentProps)
-        }
       }
     }
 

@@ -1,6 +1,4 @@
-import Vue from 'vue';
-
-import { resetStyled, expectCSSMatches } from './utils'
+import { resetStyled, expectCSSMatches, mount } from './utils'
 
 let styled
 const stripLineBreaks = (str) => str.split('\n').map(l => l.trim()).join('')
@@ -14,7 +12,7 @@ describe('css features', () => {
     const Comp = styled.div`
       transition: opacity 0.3s;
     `
-    const vm = new Vue(Comp).$mount()
+    const vm = mount(Comp)
     expectCSSMatches('.a {-webkit-transition: opacity 0.3s;transition: opacity 0.3s;}')
   })
 
@@ -24,7 +22,7 @@ describe('css features', () => {
       flex-direction: column;
       align-items: center;
     `
-    const vm = new Vue(Comp).$mount()
+    const vm = mount(Comp)
     expectCSSMatches(stripLineBreaks(`
       .a {
         display: -webkit-box;
@@ -46,7 +44,7 @@ describe('css features', () => {
     const Comp = styled.div`
       margin-bottom: calc(15px - 0.5rem) !important;
     `
-    const vm = new Vue(Comp).$mount()
+    const vm = mount(Comp)
     expectCSSMatches('.a {margin-bottom: calc(15px - 0.5rem) !important;}')
   })
 
@@ -54,7 +52,7 @@ describe('css features', () => {
     const Comp = styled.div`
       --custom-prop: some-val;
     `
-    const vm = new Vue(Comp).$mount()
+    const vm = mount(Comp)
     expectCSSMatches('.a {--custom-prop: some-val;}')
   })
 })
