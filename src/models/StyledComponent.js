@@ -1,18 +1,19 @@
 export default (ComponentStyle) => {
-  const createStyledComponent = (target, rules, props) => {
+  const createStyledComponent = (target, rules, propsDef) => {
+    const hasProps = !!propsDef
     const componentStyle = new ComponentStyle(rules)
     let getGeneratedClassName
     if (rules.filter(r => r instanceof Function).length === 0) {
       const generatedClassName = componentStyle.generateAndInjectStyles({})
       getGeneratedClassName = () => generatedClassName
     } else {
-      getGeneratedClassName = props => componentStyle.generateAndInjectStyles(Object.assign({}, props))
+      getGeneratedClassName = (props, attrs) => componentStyle.generateAndInjectStyles(Object.assign({}, props, attrs))
     }
 
     const StyledComponent = {
       functional: true,
       render: function (createElement, { props, data, slots }) {
-        const generatedClassName = getGeneratedClassName(props)
+        const generatedClassName = getGeneratedClassName(props, data.attrs)
         if (data.staticClass) {
           data.staticClass = data.staticClass + ' ' + generatedClassName
         } else {
@@ -34,6 +35,11 @@ export default (ComponentStyle) => {
           children
         )
       }
+    }
+
+    if (hasProps) {
+      // props definitions must be set only when it specified
+      StyledComponent.props = propsDef
     }
 
     return StyledComponent

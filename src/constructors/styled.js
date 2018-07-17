@@ -2,7 +2,7 @@ import css from './css'
 import domElements from '../utils/domElements'
 
 export default (createStyledComponent) => {
-  const styled = (tagName, props = {}) =>
+  const styled = (tagName, props = undefined) =>
     (cssRules, ...interpolations) => (
       createStyledComponent(tagName, css(cssRules, ...interpolations), props)
     )
